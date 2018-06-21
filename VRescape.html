@@ -2,7 +2,7 @@
 <head> 
 <title> Web VR </title> 
 <script src="aframe.min.js"></script> 
-<script>
+<script> 
 AFRAME.registerComponent('raycaster-autorefresh', {
 init: function () {
 var el = this.el;
@@ -11,7 +11,8 @@ var cursorEl = el.querySelector('[raycaster]');
 cursorEl.components.raycaster.refreshObjects();
 });
 }
-});
+}); 
+
 AFRAME.registerComponent('fusable', {
 init: function () {
 this.cursorEl = document.querySelector('a-cursor');
@@ -32,12 +33,14 @@ var el = this.el;
 this.el.addEventListener('click', function (evt) {
 var camera = document.querySelector('a-camera');
 var key = camera.querySelector('#active-item[type="key"]');
-if(key) {
-key.parentNode.removeChild(key);
-el.dispatchEvent(new Event('open-door'));
+  if(key) {
+    key.parentNode.removeChild(key);
+    el.dispatchEvent(new Event('open-door'));
+  }
+  });
+  }
 });
-}
-});
+
 AFRAME.registerComponent('can-pickup', {
 init: function () {
 this.click = this.click.bind(this);
@@ -52,7 +55,8 @@ setActiveItem(this.el);
 remove: function() {
 this.el.removeEventListener('click', this.click);
 }
-});
+}); 
+
 AFRAME.registerComponent('flashlight-listener', {
 init: function () {
 this.activate = this.activate.bind(this);
@@ -76,7 +80,7 @@ remove: function() {
 this.el.removeEventListener('activate', this.activate);
 this.el.removeEventListener('deactivate', this.deactivate);
 }
-});
+}); 
 
 AFRAME.registerComponent('inv-slot', {
 init: function () {
@@ -103,7 +107,8 @@ setActiveItem(slotItem);
 remove: function() {
 this.el.removeEventListener('click', this.click);
 }
-}); 
+});
+
 AFRAME.registerComponent('follow-feet', {
 schema: {
 x: {type: 'number', default: 0},
@@ -125,7 +130,7 @@ this.el.setAttribute('position', (position.x + this.data.x) + ' ' + (position.y 
 remove: function() {
 this.camera.removeEventListener('componentchanged', this.componentChanged);
 }
-});
+}); 
 
 AFRAME.registerComponent('teleporter', {
 init: function () {
@@ -143,7 +148,7 @@ remove: function() {
 this.el.removeEventListener('click', this.click);
 }
 }); 
- 
+
 function setActiveItem(item) {
 item.setAttribute('id', 'active-item');
 var camera = document.querySelector('a-camera');
@@ -152,7 +157,8 @@ item.setAttribute('position', '-0.25 0 -0.5');
 item.setAttribute('rotation', '-90 0 0');
 item.setAttribute('scale', '0.1 0.1 0.1');
 item.dispatchEvent(new Event('activate-item'));
-}
+} 
+
 function getEmptySlot() {
 var invSlots = ['inv-slot-1', 'inv-slot-2', 'inv-slot-3', 'inv-slot-4'];
 for(var i = 0; i < invSlots.length; i++) {
@@ -160,68 +166,88 @@ var slot = document.querySelector('#'+invSlots[i]);
 if(slot && slot.children.length === 0) { return slot; }
 }
 }
+
 function setSlotItem(slot, item) {
 item.dispatchEvent(new Event('deactivate-item'));
 item.removeAttribute('id');
 slot.appendChild(item);
 item.setAttribute('position', '-0.01 0.05 0.01');
 item.setAttribute('scale', '0.03 0.03 0.03');
-}   
+}
 </script> 
 </head> 
 <body>
-<a-scene raycaster-autorefresh>
+<a-scene raycaster-autorefresh> 
+
 <a-assets>
 <a-asset-item id="wall" src="resources/wall.gltf"></a-asset-item>
 <img id="carpet" src="resources/carpet.jpg">
 <a-asset-item id="sofa" src="resources/burlap_sofa.gltf"></a-asset-item>
 <a-asset-item id="door" src="resources/door.gltf"></a-asset-item>
 <a-asset-item id="key" src="resources/key.gltf"></a-asset-item>
-<a-asset-item id="flashlight" src="resources/flashlight.gltf"></a-asset-item>   
-</a-assets>  
+<a-asset-item id="flashlight" src="resources/flashlight.gltf"></a-asset-item>  
+</a-assets> 
+
 <a-light type="directional" color="#fff" intensity="0.8" position="2 5 0" rotation="0 0 0"></a-light> 
 
-<a-sky color="rgb(100,100,255)"></a-sky>
+<a-sky color="rgb(131, 223, 239)"></a-sky> 
 
-<a-camera position="0 1.5 0"> 
-<a-cursor fuse="true" fuse-timeout="750"></a-cursor>
+<a-camera position="0 2 0">
+<a-cursor fuse="true" fuse-timeout="750">
 <a-animation begin="start-fusing" easing="ease-in" attribute="scale" dur="750" fill="backwards" from="1 1 1" to="0.2 0.2 0.2"></a-animation> 
+</a-cursor> 
 </a-camera>
 
-<a-box position="0 2.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box> 
-<a-sphere position="1 3.5 -4.5" radius="1" color="#EF2D5E" shadow></a-sphere> 
-<a-cylinder position="1.75 2.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
+<a-box position="0 2.5 -3" rotation="0 45 0" color="#159689" shadow></a-box> 
+<a-sphere position="1 3.5 -4.5" radius="1" color="#fffa00" shadow></a-sphere> 
+<a-cylinder position="1.75 2.75 -3" radius="0.5" height="1.5" color="#ff007f" shadow></a-cylinder> 
+<a-cylinder position="7 5.75 -9" radius="0.5" height="1.5" color="#ff4c00" shadow></a-cylinder> 
 
-<a-box position="4 5.5 -6" rotation="0 -90 0" depth=".05" width="16" height="8" color="coral" shadow></a-box> 
+<!-- Side walls -->
+<a-box position="4 5.5 -6" rotation="0 -90 0" depth=".05" width="16" height="8" color="white" shadow></a-box> 
+<a-box position="-4 5.5 -6" rotation="0 -90 0" depth=".05" width="16" height="8" color="white" shadow></a-box> 
 
-<a-box position="-4 5.5 -6" rotation="0 -90 0" depth=".05" width="16" height="8" color="coral" shadow></a-box> 
 <a-plane id="inv-slot-1" rotation="-90 0 0" width="0.2" height="0.2" color="#eee" follow-feet="x: 0.2;" inv-slot shadow></a-plane>
 <a-plane id="inv-slot-2" rotation="-90 0 0" width="0.2" height="0.2" color="#eee" follow-feet="x: -0.2;" inv-slot shadow></a-plane>
 <a-plane id="inv-slot-3" rotation="-90 0 0" width="0.2" height="0.2" color="#eee" follow-feet="z: 0.2;" inv-slot shadow></a-plane>
-<a-plane id="inv-slot-4" rotation="-90 0 0" width="0.2" height="0.2" color="#eee" follow-feet="z: -0.2;" inv-slot shadow></a-plane> 
-<a-sphere position="0 4 0" radius="0.15" color="purple" teleporter fusable shadow></a-sphere>
-<a-sphere position="-3 4 -7" radius="0.15" color="purple" teleporter fusable shadow></a-sphere>
-<a-box position="2 5.5 -5.8" rotation="0 180 0" depth=".05" width="8.3" height="8" color="beige" shadow></a-box>
-<a-box position="-2.7 7.2 -5.8" rotation="0 180 0" depth=".05" width="1.2" height="4.8" color="beige" shadow></a-box>
-<a-box position="-4 5.5 -5.8" rotation="0 180 0" depth=".05" width="1.5" height="8" color="beige" shadow></a-box> 
-<a-box position="0 9 -6" rotation="-270 0 0" depth=".05" width="8" height="16" shadow></a-box> 
+<a-plane id="inv-slot-4" rotation="-90 0 0" width="0.2" height="0.2" color="#eee" follow-feet="z: -0.2;" inv-slot shadow></a-plane>
+
+<!-- Teleporters -->
+<a-sphere position="0 4 0" radius="0.15" color="white" teleporter fusable shadow></a-sphere>
+<a-sphere position="-3 4 -7" radius="0.15" color="white" teleporter fusable shadow></a-sphere>
+
+<!-- 3 Piece Door Wall -->
+<a-box position="2 5.5 -5.8" rotation="0 180 0" depth=".05" width="8.3" height="8" color="blue" shadow></a-box>
+<a-box position="-2.7 7.2 -5.8" rotation="0 180 0" depth=".05" width="1.2" height="4.8" color="blue" shadow></a-box>
+<a-box position="-4 5.5 -5.8" rotation="0 180 0" depth=".05" width="1.5" height="8" color="blue" shadow></a-box> 
+
+<!-- Far wall Blacked Out-->
 <a-box position="0 5.5 -14" rotation="0 0 0" depth=".05" width="8" height="8" color="brown" shadow></a-box> 
-<a-text position="-2.5 5.5 -13.9" color="black" scale="6 6 6" value="You Win!"></a-text> 
+<!-- Far wall Blacked Out-->
+<a-box position="0 5.5 -14" rotation="0 0 0" depth=".05" width="8" height="8" color="brown" shadow></a-box> 
 
-<a-plane position="0 1.5 -6" src="#carpet" repeat="90 90" rotation="-90 0 0" width="8" height="16" color="#7BC8A4" shadow></a-plane> 
+<!-- TEXT -->
+<a-text position="-2.5 5.5 -13.9" color="pink" scale="6 6 6" value="You Win!"></a-text>
+<!-- TEXT -->
+<a-text position="-2.5 5.5 -13.9" color="pink" scale="6 6 6" value="You Win!"></a-text>
 
-<a-gltf-model scale="1.7 1.7 1.7" position="0.2 1.5 -5.6" rotation="0 0 0" src="#wall" shadow></a-gltf-model> 
-<a-gltf-model scale="1.7 1.7 1.7" position="-3.7 1.5 -2" rotation="0 90 0" src="#sofa" shadow></a-gltf-model>
-<a-gltf-model scale="1.7 1.7 1.7" position="x 1.5 z" rotation="0 -180 0" src="#door" door-listener fusable clickable shadow>
-<a-gltf-model type="key" position="-3 1.5 0.1" rotation="0 50 0" scale="0.1 0.1 0.1" src="#key" shadow can-pickup fusable></a-gltf-model> 
-<a-gltf-model position="-1 1.5 0" rotation="0 0 0" scale="0.1 0.1 0.1" src="#flashlight" shadow can-pickup fusable flashlight-listener>
-<a-light color="#fff" decay="0.2" angle="30" intensity="0.1" distance="12" rotation="0 0 0" position="0 5 0" type="point">
-</a-light> 
-</a-gltf-model>
-<a-animation begin="open-door" attribute="rotation" to="0 -50 0" dur="1500"></a-animation>
-<a-animation begin="open-door" attribute="position" to="-2.05 1.5 -5.5" dur="1500"></a-animation> 
-</a-gltf-model>
+<!-- Floor -->
+<a-plane position="0 1.5 -6" src="#carpet" repeat="90 90" rotation="-90 0 0" width="8" height="16" color="#ff0000" shadow></a-plane>
+<a-box position="0 9 -6" rotation="-270 0 0" depth=".05" width="8" height="16" shadow></a-box>
+
+      <a-gltf-model position="-3.7 1.5 -2" scale="1.7 1.7 1.7" rotation="0 90 0" src="#sofa" shadow></a-gltf-model>
+      <a-gltf-model scale="1.7 1.7 1.7" position="0.2 1.5 -5.6" rotation="0 0 0" src="#wall" shadow></a-gltf-model>
+
+      <a-gltf-model scale="1.7 1.7 1.7" position="-2.05 1.5 -5.7" rotation="0 -180 0" src="#door" door-listener fusable clickable shadow>
+        <a-animation begin="open-door" attribute="rotation" to="0 -50 0" dur="1500"></a-animation>
+        <a-animation begin="open-door" attribute="position" to="-2.05 1.5 -5.5" dur="1500"></a-animation>
+      </a-gltf-model>
+      <a-gltf-model type="key" position="-3 1.5 0.1" rotation="0 50 0" scale="0.1 0.1 0.1" src="#key" shadow can-pickup fusable></a-gltf-model>
+
+      <a-gltf-model position="-1 1.5 0" rotation="0 0 0" scale="0.1 0.1 0.1" src="#flashlight" can-pickup fusable flashlight-listener shadow>
+        <a-light color="#fff" decay="0.2" angle="30" intensity="0.1" distance="12" rotation="0 0 0" position="0 5 0" type="point"></a-light>
+      </a-gltf-model>
 
 </a-scene>  
-
-</html>
+</body> 
+</html> 
